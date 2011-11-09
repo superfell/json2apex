@@ -1,0 +1,8 @@
+/tmp
+/modules
+/test-result
+/logs
+.DS_Store
+/.classpath
+/.project
+/.settings

@@ -1,0 +1,15 @@
+#{extends 'main.html' /}
+#{set title:'Home' /}
+
+<form action="@{Application.makeApex()}" method="GET">
+	<h3>Paste your json here</h3>
+	#{if flash.error}
+	    <p style="color:#c00">
+	        ${flash.error}
+	    </p>
+	#{/if}
+	<textarea name="json" rows="10" cols="100">
+	</textarea>
+	<br/>
+    <input type="submit" value="Create Apex" />
+</form>
