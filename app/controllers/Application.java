@@ -21,6 +21,8 @@ public class Application extends Controller {
 	        flash.error("Oops, please enter your json and className!");
 	        index(json, className);
 	    }
+	 	json = json.trim();
+	 	className = className.trim();
 		try {
 			ObjectMapper m = new ObjectMapper();
 			Object o = m.readValue(json, Object.class);
