@@ -15,9 +15,9 @@ public class Application extends Controller {
         render();
     }
 
- 	public static void makeApex(@Required String json) {
+ 	public static void makeApex(@Required String json, @Required String className) {
 	 	if (Validation.hasErrors()) {
-	        flash.error("Oops, please enter your json!");
+	        flash.error("Oops, please enter your json and className!");
 	        index();
 	    }
 		try {
@@ -27,10 +27,14 @@ public class Application extends Controller {
 			ApexType root = factory.typeOfObject("Root", o);
 			StringBuilder def = new StringBuilder();
 			if (factory.getClasses().size() > 0) {
-				def.append("public class ruby99 {\n\n");
+				def.append("public class ").append(className).append(" {\n\n");
 				for (ApexClass c : factory.getClasses()) {
 					c.writeClassDefinition(def);
 				}
+				def.append("\n");
+				def.append("\tpublic static ").append(root.toString());
+				def.append(" parseJson(String json) {\n\t\treturn (");
+				def.append(root.toString()).append(")System.JSON.deserialize(json, ").append(root.toString()).append(".class);\n\t}\n");
 				def.append("\n}\n");
 			}
 			renderText(def.toString());
