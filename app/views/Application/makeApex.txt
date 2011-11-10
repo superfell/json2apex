@@ -16,4 +16,10 @@ public class ${className} {
 	public static ${root} parse(String json) {
 		return (${root}) System.JSON.deserialize(json, ${root}.class);
 	}
+	
+	static testMethod void testParse() {
+		String json = '${json.escapeApex()}';
+		${root} r = parse(json);
+		System.assert(r != null);
+	}
 }

@@ -8,7 +8,7 @@ public class ApexClass extends ApexType {
 	ApexClass(String className, Map<String, ApexType> members) {
 		if (className == null) throw new NullPointerException();
 		if (members == null) throw new NullPointerException();
-		this.className = className;
+		this.className = className.length() > 1 ? className.substring(0, 1).toUpperCase() + className.substring(1) : className;
 		this.members = members;
 	}
 	

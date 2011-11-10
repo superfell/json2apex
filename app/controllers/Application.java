@@ -27,7 +27,7 @@ public class Application extends Controller {
 			ApexType root = factory.typeOfObject("Root", o);
 			List<ApexClass> classes = factory.getClasses();
 			request.format = "txt";
-			render(className, root, classes);
+			render(className, json, root, classes);
 			
 		} catch (IOException ex) {
 			throw new RuntimeException(ex);
