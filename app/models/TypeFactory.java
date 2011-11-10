@@ -30,6 +30,8 @@ public class TypeFactory {
 			return ApexPrimative.INT;
 		} else if (o instanceof Double) {
 			return ApexPrimative.DOUBLE;
+		} else if (o instanceof Boolean) {
+			return ApexPrimative.BOOLEAN;
 		}
 		throw new RuntimeException("Unexpected type " + o.getClass() + " in TypeFactory.typeOfObject()");
 	}
