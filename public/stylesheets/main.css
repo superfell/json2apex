@@ -1,0 +1,38 @@
+html, body {
+    background: #364B66 !important;
+    font-family: Helvetica, Arial, Sans !important;
+}
+
+body {
+    width: 900px;
+    padding: 0 30px;
+    margin: auto;
+    color: #fefdfc;
+}
+
+h1 {
+    background: #B8C569;
+    padding: 20px 30px 30px 20px;
+    margin: 20px 0;
+    color: #3C4313;
+    position: relative;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+}
+
+h3 {
+    background: #CFCFCF;
+   	color: #304040;
+    padding: 5px 6px 6px 5px;
+    margin: 20px 0;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+}
+
+textarea {
+	width:900px;
+}
+
+A {
+	color: #B8C569;
+}
