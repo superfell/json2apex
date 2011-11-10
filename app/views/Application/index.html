@@ -1,6 +1,8 @@
 #{extends 'main.html' /}
 #{set title:'Home' /}
 
+This tool will help generate strongly typed <a href="http://wiki.developerforce.com/page/App_Logic">Apex code</a> for parsing a JSON structure given an example of the JSON.
+
 <form action="@{Application.makeApex()}" method="GET">
 	<h3>Paste your json here</h3>
 	#{if flash.error}
@@ -8,10 +10,13 @@
 	        ${flash.error}
 	    </p>
 	#{/if}
-	<textarea name="json" rows="10" cols="100">
-	</textarea>
+
+<textarea name="json" rows="10" cols="100">
+${json}
+</textarea>
+
 	<br/>
-	Name for the generated class : <input type="text" maxlength="32" value="JSON2Apex" name="className">
+	Name for the generated class : <input type="text" maxlength="32" value="${className}" name="className">
 	<br/>
     <input type="submit" value="Create Apex" />
 </form>

@@ -11,14 +11,15 @@ import models.*;
 
 public class Application extends Controller {
 
-    public static void index() {
-        render();
-    }
-
+	public static void index(String json, String className) {
+		if (className == null) className = "JSON2Apex";
+		render(json, className);
+	}
+	
  	public static void makeApex(@Required String json, @Required String className) {
 	 	if (Validation.hasErrors()) {
 	        flash.error("Oops, please enter your json and className!");
-	        index();
+	        index(json, className);
 	    }
 		try {
 			ObjectMapper m = new ObjectMapper();
@@ -30,7 +31,8 @@ public class Application extends Controller {
 			render(className, json, root, classes);
 			
 		} catch (IOException ex) {
-			throw new RuntimeException(ex);
+			flash.error("sorry, unable to parse your json: " + ex.getMessage());
+			index(json, className);
 		}
     }
 }
