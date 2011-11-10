@@ -15,19 +15,15 @@ public class ApexClass extends ApexType {
 	private final String className;
 	private final Map<String, ApexType> members;
 	
+	public Map<String, ApexType> getMembers() {
+		return members;
+	}
+	
 	@Override
 	public String toString() {
 		return className;
 	}
 
-	public void writeClassDefinition(Appendable dest) throws IOException {
-		dest.append("public class ").append(className).append(" {\n");
-		for (Map.Entry<String, ApexType> m : members.entrySet()) {
-			dest.append("\tpublic ").append(m.getValue().toString()).append(" ").append(m.getKey()).append(";\n");
-		}
-		dest.append("}\n");
-	}
-	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

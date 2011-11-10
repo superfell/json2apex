@@ -25,19 +25,9 @@ public class Application extends Controller {
 			Object o = m.readValue(json, Object.class);
 			TypeFactory factory = new TypeFactory();
 			ApexType root = factory.typeOfObject("Root", o);
-			StringBuilder def = new StringBuilder();
-			if (factory.getClasses().size() > 0) {
-				def.append("public class ").append(className).append(" {\n\n");
-				for (ApexClass c : factory.getClasses()) {
-					c.writeClassDefinition(def);
-				}
-				def.append("\n");
-				def.append("\tpublic static ").append(root.toString());
-				def.append(" parseJson(String json) {\n\t\treturn (");
-				def.append(root.toString()).append(")System.JSON.deserialize(json, ").append(root.toString()).append(".class);\n\t}\n");
-				def.append("\n}\n");
-			}
-			renderText(def.toString());
+			List<ApexClass> classes = factory.getClasses();
+			request.format = "txt";
+			render(className, root, classes);
 			
 		} catch (IOException ex) {
 			throw new RuntimeException(ex);
