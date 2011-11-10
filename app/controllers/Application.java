@@ -24,7 +24,7 @@ public class Application extends Controller {
 			ObjectMapper m = new ObjectMapper();
 			Object o = m.readValue(json, Object.class);
 			TypeFactory factory = new TypeFactory();
-			ApexType root = factory.typeOfObject("root", o);
+			ApexType root = factory.typeOfObject("Root", o);
 			StringBuilder def = new StringBuilder();
 			if (factory.getClasses().size() > 0) {
 				def.append("public class ruby99 {\n\n");
