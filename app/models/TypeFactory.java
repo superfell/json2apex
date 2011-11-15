@@ -1,18 +1,43 @@
 package models;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class TypeFactory {
 	
+	private static final Set<String> reserved;
+	
+	static {
+		// reserved words taken from docs
+		// at http://www.salesforce.com/us/developer/docs/apexcode/index_Left.htm#StartTopic=Content/apex_reserved_words.htm
+		reserved = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList(new String[] {
+			"abstract", "activate", "and", "any", "array", "as", "asc", "autonomous",
+			"begin", "bigdecimal", "blob", "break","bulk", "by", "byte",
+			"case","cast","catch","char","class","collect","commit","const","continue","convertcurrency",
+			"decimal","default","delete","desc","do",
+			"else","end","enum","exit","export","extends","false","final","finally","float","for","from","future",
+			"global","goto","group",
+			"having","hint","if","implements","import","inner","insert","instanceof","interface","into","int",
+			"join",
+			"last_90_days","last_month","last_n_days","last_week","like","limit","list","long","loop",
+			"map","merge",
+			"new","next_90_days","next_month","next_n_days","next_week","not","null","nulls","number",
+			"object","of","on","or","outer","override",
+			"package","parallel","pragma","private","protected","public",
+			"retrieve","return","returning","rollback",
+			"savepoint","search","select","set","short","sort","stat","super","switch","synchronized","system",
+			"testmethod","then","this","this_month","this_week","throw","today","tolabel","tomorrow","transaction",
+			"trigger","true","try","type",
+			"undelete","update","upsert","using",
+			"virtual",
+			"webservice","when","where","while",
+			"yesterday"
+		})));
+	}
+
 	public TypeFactory() {
 		this.classes = new HashMap<String, ApexClass>();
 	}
-	
+
 	private final HashMap<String, ApexClass> classes;
 	
 	public Collection<ApexClass> getClasses() {
@@ -79,7 +104,7 @@ public class TypeFactory {
 	private String getClassName(String proposed) {
 		boolean first = true;
 		char letter = 'Z';
-		while (classes.containsKey(proposed)) {
+		while (classes.containsKey(proposed) || reserved.contains(proposed.toLowerCase())) {
 			if (first) proposed = proposed + "_Z";
 			if (!proposed.endsWith("A"))
 				proposed = proposed.substring(0, proposed.length()-1);
