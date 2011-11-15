@@ -3,7 +3,7 @@
 
 This tool will help generate strongly typed <a href="http://wiki.developerforce.com/page/App_Logic">Apex code</a> for parsing a JSON structure given an example of the JSON.
 
-<form action="@{Application.makeApex()}" method="GET">
+<form action="@{Application.makeApex()}" method="POST">
 	<h3>Paste your json here, e.g. { "user" : { "name" : "Simon Fell", "twitter" : "@superfell" } }</h3>
 	#{if flash.error}
 	    <p style="color:#c00">
