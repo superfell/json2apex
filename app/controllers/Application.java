@@ -28,7 +28,7 @@ public class Application extends Controller {
 			Object o = m.readValue(json, Object.class);
 			TypeFactory factory = new TypeFactory();
 			ApexType root = factory.typeOfObject("Root", o);
-			List<ApexClass> classes = factory.getClasses();
+			Collection<ApexClass> classes = factory.getClasses();
 			request.format = "txt";
 			render(className, json, root, classes);
 			
