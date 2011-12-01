@@ -54,6 +54,8 @@ public class TypeFactory {
 			return ApexPrimative.STRING;
 		} else if (o instanceof Integer) {
 			return ApexPrimative.INT;
+		} else if (o instanceof Long) {
+			return ApexPrimative.LONG;
 		} else if (o instanceof Double) {
 			return ApexPrimative.DOUBLE;
 		} else if (o instanceof Boolean) {
