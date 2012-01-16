@@ -16,7 +16,7 @@ public class Application extends Controller {
 		render(json, className);
 	}
 	
- 	public static void makeApex(@Required String json, @Required String className) {
+ 	public static void makeApex(@Required String json, @Required String className, @Required boolean createParseCode) {
 	 	if (Validation.hasErrors()) {
 	        flash.error("Oops, please enter your json and className!");
 	        index(json, className);
@@ -30,8 +30,11 @@ public class Application extends Controller {
 			ApexType root = factory.typeOfObject("Root", o);
 			Collection<ApexClass> classes = factory.getClasses();
 			request.format = "txt";
-			render(className, json, root, classes);
-			
+			if (createParseCode) {
+				renderTemplate("Application/makeApexWithParse.txt", className, json, root, classes);				
+			} else {
+				render(className, json, root, classes);
+			}			
 		} catch (IOException ex) {
 			flash.error("sorry, unable to parse your json: " + ex.getMessage());
 			index(json, className);
