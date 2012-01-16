@@ -8,7 +8,7 @@ public class ApexClass extends ApexType {
 	ApexClass(String className, Map<String, ApexType> members) {
 		if (className == null) throw new NullPointerException();
 		if (members == null) throw new NullPointerException();
-		this.className = className.length() > 1 ? className.substring(0, 1).toUpperCase() + className.substring(1) : className;
+		this.className = className;
 		this.members = members;
 	}
 	
@@ -45,5 +45,13 @@ public class ApexClass extends ApexType {
 	/** @return true if this map of members equals our map of members */
 	boolean membersEqual(Map<String, ApexType> other) {
 		return members.equals(other);
+	}
+	
+	void mergeFields(ApexClass other) {
+		for ( String key : other.getMembers().keySet() ) {
+			if (members.get(key) == null) {
+				members.put(key, other.getMembers().get(key));
+			}
+		}
 	}
 }
