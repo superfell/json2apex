@@ -18,69 +18,87 @@ public class ${className} {
 	}
 
 #{list items:classes, as:'cls'}
+#{if cls.toString() != 'Root'}
+#{set 'indent'}	#{/set}
 	public class ${cls} {
+#{/if}
+#{else}
+#{set 'indent'}#{/set}
+#{/else}
 #{list items:cls.members.entrySet(), as:'m'}
-		public ${m.value} ${m.key} {get;set;}
+#{get 'indent' /}	public ${m.value} ${m.key} {get;set;}
 #{/list}
 
+#{if cls.toString() == 'Root'}
+	public ${className}(JSONParser parser) {
+#{/if}
+#{else}
 		public ${cls}(JSONParser parser) {
-			while (parser.nextToken() != JSONToken.END_OBJECT) {
-				if (parser.getCurrentToken() == JSONToken.FIELD_NAME) {
-					String text = parser.getText();
-					parser.nextToken();
-					#{list items:cls.members.entrySet(), as:'m'}
+#{/else}
+#{get 'indent' /}		while (parser.nextToken() != JSONToken.END_OBJECT) {
+#{get 'indent' /}			if (parser.getCurrentToken() == JSONToken.FIELD_NAME) {
+#{get 'indent' /}				String text = parser.getText();
+#{get 'indent' /}				parser.nextToken();
+#{get 'indent' /}				#{list items:cls.members.entrySet(), as:'m'}
 if (text == '${m.key}') {
 #{if m.value.toString() == 'String'}
-						${m.key} = parser.getText();
+#{get 'indent' /}					${m.key} = parser.getText();
 #{/if}
 #{elseif m.value.toString() == 'Integer'}
-						${m.key} = parser.getIntegerValue();
+#{get 'indent' /}					${m.key} = parser.getIntegerValue();
 #{/elseif}
 #{elseif m.value.toString() == 'Double'}
-						${m.key} = parser.getDoubleValue();
+#{get 'indent' /}					${m.key} = parser.getDoubleValue();
 #{/elseif}
 #{elseif m.value.toString() == 'Boolean'}
-						${m.key} = parser.getBooleanValue();
+#{get 'indent' /}					${m.key} = parser.getBooleanValue();
 #{/elseif}
 #{elseif m.value.toString() == 'Long'}
-						${m.key} = parser.getLongValue();
+#{get 'indent' /}					${m.key} = parser.getLongValue();
 #{/elseif}
 #{elseif m.value.toString() == 'Long'}
-						${m.key} = parser.getLongValue();
+#{get 'indent' /}					${m.key} = parser.getLongValue();
 #{/elseif}
 #{elseif m.value.toString().startsWith('List<')}
-						${m.key} = new ${m.value}();
-						while (parser.nextToken() != JSONToken.END_ARRAY) {
-							${m.key}.add(new ${m.value.itemType()}(parser));
-						}
+#{get 'indent' /}					${m.key} = new ${m.value}();
+#{get 'indent' /}					while (parser.nextToken() != JSONToken.END_ARRAY) {
+#{get 'indent' /}						${m.key}.add(new ${m.value.itemType()}(parser));
+#{get 'indent' /}					}
 #{/elseif}
 #{else}
-						${m.key} = new ${m.value}(parser);
+#{get 'indent' /}					${m.key} = new ${m.value}(parser);
 #{/else}
-					} else #{/list}{
-						System.debug(LoggingLevel.WARN, '${cls} consuming unrecognized property: '+text);
-						consumeObject(parser);
-					}
-				}
-			}
-		}
+#{get 'indent' /}				} else #{/list}{
+#{get 'indent' /}					System.debug(LoggingLevel.WARN, '${cls} consuming unrecognized property: '+text);
+#{get 'indent' /}					consumeObject(parser);
+#{get 'indent' /}				}
+#{get 'indent' /}			}
+#{get 'indent' /}		}
+#{get 'indent' /}	}
+#{if cls.toString() != 'Root'}
 	}
+#{/if}
 	
 #{/list}
 	
-	public static ${root} parse(String json) {
-		return new ${root}(System.JSON.createParser(json));
+	public static ${className} parse(String json) {
+		return new ${className}(System.JSON.createParser(json));
 	}
 	
 	// This test method should give 100% coverage
 	static testMethod void testParse() {
 		String json = '${json.escapeApex()}';
-		${root} r = parse(json);
+		${className} r = parse(json);
 		System.assert(r != null);
 #{list items:classes, as:'cls'}
 
 		json = '{\"TestAMissingObject\": { \"TestAMissingArray\": [ { \"TestAMissingProperty\": \"Some Value\" } ] } }';
+#{if cls.toString() == 'Root'}
+		${className} obj${cls} = new ${className}(System.JSON.createParser(json));
+#{/if}
+#{else}
 		${cls} obj${cls} = new ${cls}(System.JSON.createParser(json));
+#{/else}
 		System.assert(obj${cls} != null);
 #{list items:cls.members.entrySet(), as:'m'}
 		System.assert(obj${cls}.${m.key} == null);
