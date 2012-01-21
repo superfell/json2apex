@@ -81,7 +81,7 @@ public class TypeFactory {
 					
   					apexClass.mergeFields(thisApexClass);
 
-					ApexClass prev = classes.remove(thisApexClass.toString());
+					classes.remove(thisApexClass.toString());
 				} else {
 					throw new RuntimeException("Can't add an " + o.getClass() + " to a collection of " + itemType.getClass());
   				}
