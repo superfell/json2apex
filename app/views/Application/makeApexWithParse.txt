@@ -56,9 +56,6 @@ if (text == '${m.key}') {
 #{elseif m.value.toString() == 'Long'}
 #{get 'indent' /}					${m.key} = parser.getLongValue();
 #{/elseif}
-#{elseif m.value.toString() == 'Long'}
-#{get 'indent' /}					${m.key} = parser.getLongValue();
-#{/elseif}
 #{elseif m.value.toString().startsWith('List<')}
 #{get 'indent' /}					${m.key} = new ${m.value}();
 #{get 'indent' /}					while (parser.nextToken() != JSONToken.END_ARRAY) {
