@@ -66,14 +66,25 @@ public class TypeFactory {
 	
 	/** @return a concrete type if all the list items are of the same type, Object, otherwise */
 	ApexType typeOfCollection(String propertyName, Collection<?> col) {
-		if (col == null || col.size() == 0) return ApexPrimative.OBJECT;
+		if (col == null || col.size() == 0) { 
+			return typeOfObject(propertyName, Collections.EMPTY_MAP);
+		}
 		ApexType itemType = null;
 		for (Object o : col) {
 			ApexType thisItemType = typeOfObject(propertyName, o);
 			if (itemType == null) {
 				itemType = thisItemType;
 			} else if (!itemType.equals(thisItemType)) {
-				return ApexPrimative.OBJECT;
+				if (itemType instanceof ApexClass && thisItemType instanceof ApexClass) {
+					ApexClass apexClass = (ApexClass)itemType;
+					ApexClass thisApexClass = (ApexClass)thisItemType;
+					
+  					apexClass.mergeFields(thisApexClass);
+
+					ApexClass prev = classes.remove(thisApexClass.toString());
+				} else {
+					throw new RuntimeException("Can't add an " + o.getClass() + " to a collection of " + itemType.getClass());
+  				}
 			}
 		}
 		return itemType;
@@ -106,6 +117,7 @@ public class TypeFactory {
 	private String getClassName(String proposed) {
 		boolean first = true;
 		char letter = 'Z';
+		proposed = proposed.length() > 1 ? proposed.substring(0, 1).toUpperCase() + proposed.substring(1) : proposed;
 		while (classes.containsKey(proposed) || reserved.contains(proposed.toLowerCase())) {
 			if (first) proposed = proposed + "_Z";
 			if (!proposed.endsWith("A"))

@@ -5,21 +5,29 @@
 public class ${className} {
 
 #{list items:classes, as:'cls'}
+#{if cls.toString() != 'Root'}
+#{set 'indent'}	#{/set}
 	public class ${cls} {
-	#{list items:cls.members.entrySet(), as:'m'}
-	public ${m.value} ${m.key};
-	#{/list}
-}
-	
+#{/if}
+#{else}
+#{set 'indent'}#{/set}
+#{/else}
+#{list items:cls.members.entrySet(), as:'m'}
+#{get 'indent' /}	public ${m.value} ${m.key};
+#{/list}
+#{if cls.toString() != 'Root'}
+	}
+#{/if}
+
 #{/list}
 	
-	public static ${root} parse(String json) {
-		return (${root}) System.JSON.deserialize(json, ${root}.class);
+	public static ${className} parse(String json) {
+		return (${className}) System.JSON.deserialize(json, ${className}.class);
 	}
 	
 	static testMethod void testParse() {
 		String json = '${json.escapeApex()}';
-		${root} r = parse(json);
-		System.assert(r != null);
+		${className} obj = parse(json);
+		System.assert(obj != null);
 	}
 }

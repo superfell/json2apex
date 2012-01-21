@@ -5,7 +5,6 @@ public class ApexPrimative extends ApexType {
 	public static ApexPrimative STRING = new ApexPrimative("String");
 	public static ApexPrimative INT    = new ApexPrimative("Integer");
 	public static ApexPrimative DOUBLE = new ApexPrimative("Double");
-	public static ApexPrimative OBJECT = new ApexPrimative("Object");
 	public static ApexPrimative BOOLEAN= new ApexPrimative("Boolean");
 	public static ApexPrimative LONG   = new ApexPrimative("Long");
 	

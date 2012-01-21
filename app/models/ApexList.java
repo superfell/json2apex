@@ -14,6 +14,10 @@ class ApexList extends ApexType {
 		return "List<" + itemType.toString() + ">";
 	}
 	
+	public String itemType() {
+		return itemType.toString();
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
