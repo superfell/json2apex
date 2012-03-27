@@ -7,6 +7,7 @@ public class ApexPrimative extends ApexType {
 	public static ApexPrimative DOUBLE = new ApexPrimative("Double");
 	public static ApexPrimative BOOLEAN= new ApexPrimative("Boolean");
 	public static ApexPrimative LONG   = new ApexPrimative("Long");
+	public static ApexPrimative OBJECT = new ApexPrimative("Object");
 	
 	private ApexPrimative(String primativeType) {
 		if (primativeType == null) throw new NullPointerException();
