@@ -18,6 +18,14 @@ public class ApexMember {
 	public final String jsonFieldName;
 	public final String apexMemberName;
 	
+	/** @return an apex comment if the json & apex names are different */
+	public String getMemberComment() {
+		if (jsonFieldName.equals(apexMemberName)) {
+			return "";
+		}
+		return "// in json: " + jsonFieldName;
+	}
+	
 	@Override
 	public String toString() {
 		return jsonFieldName;
