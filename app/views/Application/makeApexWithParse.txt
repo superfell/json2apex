@@ -26,7 +26,7 @@ public class ${className} {
 #{set 'indent'}#{/set}
 #{/else}
 #{list items:cls.members.entrySet(), as:'m'}
-#{get 'indent' /}	public ${m.value} ${m.key} {get;set;}
+#{get 'indent' /}	public ${m.value} ${m.key.apexMemberName} {get;set;}
 #{/list}
 
 #{if cls.toString() == 'Root'}
@@ -40,30 +40,30 @@ public class ${className} {
 #{get 'indent' /}				String text = parser.getText();
 #{get 'indent' /}				if (parser.nextToken() != JSONToken.VALUE_NULL) {
 #{get 'indent' /}					#{list items:cls.members.entrySet(), as:'m'}
-if (text == '${m.key}') {
+if (text == '${m.key.jsonFieldName}') {
 #{if m.value.toString() == 'String'}
-#{get 'indent' /}						${m.key} = parser.getText();
+#{get 'indent' /}						${m.key.apexMemberName} = parser.getText();
 #{/if}
 #{elseif m.value.toString() == 'Integer'}
-#{get 'indent' /}						${m.key} = parser.getIntegerValue();
+#{get 'indent' /}						${m.key.apexMemberName} = parser.getIntegerValue();
 #{/elseif}
 #{elseif m.value.toString() == 'Double'}
-#{get 'indent' /}						${m.key} = parser.getDoubleValue();
+#{get 'indent' /}						${m.key.apexMemberName} = parser.getDoubleValue();
 #{/elseif}
 #{elseif m.value.toString() == 'Boolean'}
-#{get 'indent' /}						${m.key} = parser.getBooleanValue();
+#{get 'indent' /}						${m.key.apexMemberName} = parser.getBooleanValue();
 #{/elseif}
 #{elseif m.value.toString() == 'Long'}
-#{get 'indent' /}						${m.key} = parser.getLongValue();
+#{get 'indent' /}						${m.key.apexMemberName} = parser.getLongValue();
 #{/elseif}
 #{elseif m.value.toString().startsWith('List<')}
-#{get 'indent' /}						${m.key} = new ${m.value}();
+#{get 'indent' /}						${m.key.apexMemberName} = new ${m.value}();
 #{get 'indent' /}						while (parser.nextToken() != JSONToken.END_ARRAY) {
-#{get 'indent' /}							${m.key}.add(new ${m.value.itemType()}(parser));
+#{get 'indent' /}							${m.key.apexMemberName}.add(new ${m.value.itemType()}(parser));
 #{get 'indent' /}						}
 #{/elseif}
 #{else}
-#{get 'indent' /}						${m.key} = new ${m.value}(parser);
+#{get 'indent' /}						${m.key.apexMemberName} = new ${m.value}(parser);
 #{/else}
 #{get 'indent' /}					} else #{/list}{
 #{get 'indent' /}						System.debug(LoggingLevel.WARN, '${cls} consuming unrecognized property: '+text);
@@ -99,7 +99,7 @@ if (text == '${m.key}') {
 #{/else}
 		System.assert(obj${cls} != null);
 #{list items:cls.members.entrySet(), as:'m'}
-		System.assert(obj${cls}.${m.key} == null);
+		System.assert(obj${cls}.${m.key.apexMemberName} == null);
 #{/list}
 #{/list}
 	}

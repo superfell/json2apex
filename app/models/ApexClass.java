@@ -2,10 +2,11 @@ package models;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 
 public class ApexClass extends ApexType {
 
-	ApexClass(String className, Map<String, ApexType> members) {
+	ApexClass(String className, Map<ApexMember, ApexType> members) {
 		if (className == null) throw new NullPointerException();
 		if (members == null) throw new NullPointerException();
 		this.className = className;
@@ -13,9 +14,9 @@ public class ApexClass extends ApexType {
 	}
 	
 	private final String className;
-	private final Map<String, ApexType> members;
+	private final Map<ApexMember, ApexType> members;
 	
-	public Map<String, ApexType> getMembers() {
+	public Map<ApexMember, ApexType> getMembers() {
 		return members;
 	}
 	
@@ -26,11 +27,7 @@ public class ApexClass extends ApexType {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + className.hashCode();
-		result = prime * result + members.hashCode();
-		return result;
+		return Objects.hash(className, members);
 	}
 
 	@Override
@@ -43,12 +40,12 @@ public class ApexClass extends ApexType {
 	}
 	
 	/** @return true if this map of members equals our map of members */
-	boolean membersEqual(Map<String, ApexType> other) {
+	boolean membersEqual(Map<ApexMember, ApexType> other) {
 		return members.equals(other);
 	}
 	
 	void mergeFields(ApexClass other) {
-		for ( String key : other.getMembers().keySet() ) {
+		for (ApexMember key : other.getMembers().keySet() ) {
 			if (members.get(key) == null) {
 				members.put(key, other.getMembers().get(key));
 			}

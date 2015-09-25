@@ -1,6 +1,7 @@
 package models;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 public class TypeFactory {
 	
@@ -94,7 +95,7 @@ public class TypeFactory {
 	
 	/** @return an ApexClass for this map */
 	ApexType typeOfMap(String propertyName, Map o) {
-		Map<String, ApexType> members = makeMembers(o);
+		Map<ApexMember, ApexType> members = makeMembers(o);
 		// see if any existing classes have the same member set
 		for (ApexClass cls : classes.values()) {
 			if (cls.membersEqual(members))
@@ -107,27 +108,46 @@ public class TypeFactory {
 	}
 	
 	/** converts a Map of json types into a map of ApexType's */
-	private Map<String, ApexType> makeMembers(Map<String, Object> o) {
-		Map<String, ApexType> members = new LinkedHashMap<String, ApexType>();
+	private Map<ApexMember, ApexType> makeMembers(Map<String, Object> o) {
+		Map<ApexMember, ApexType> members = new LinkedHashMap<>();
+		Set<String> fieldNames = new HashSet<>();
+		for (String m : o.keySet()) {
+			fieldNames.add(m.toLowerCase());
+		}
 		for (Map.Entry<String, Object> e : o.entrySet()) {
 			ApexType memberType = typeOfObject(e.getKey(), e.getValue());
-			members.put(e.getKey(), memberType);
+			ApexMember memberName = new ApexMember(e.getKey(), getApexMemberName(e.getKey(), fieldNames));
+			members.put(memberName, memberType);
 		}
 		return members;
 	}
 	
 	private String getClassName(String proposed) {
-		boolean first = true;
-		char letter = 'Z';
 		proposed = proposed.length() > 1 ? proposed.substring(0, 1).toUpperCase() + proposed.substring(1) : proposed;
-		while (classes.containsKey(proposed) || reserved.contains(proposed.toLowerCase())) {
-			if (first) proposed = proposed + "_Z";
+		return getSafeName(proposed, (p) -> !(classes.containsKey(p) || reserved.contains(p.toLowerCase())));
+	}
+
+	// getSafeName will try alternatives of proposed until the checker says its okay
+	private String getSafeName(String proposed, Predicate<String> checker) {
+		if (checker.test(proposed)) {
+			return proposed;
+		}
+		char letter = 'Z';
+		proposed = proposed + "_" + letter;
+		while (!checker.test(proposed)) {
 			if (!proposed.endsWith("A"))
 				proposed = proposed.substring(0, proposed.length()-1);
 			proposed = proposed + letter;
 			letter = (letter == 'A') ? 'Z' : (char)(letter-1);
-			first = false;
 		}
 		return proposed;
+	}
+	
+	// returns a version of name that's safe to use as an apex class member name
+	String getApexMemberName(String name, Set<String> otherMemberNames) {
+		if (!reserved.contains(name.toLowerCase())) {
+			return name;
+		}
+		return getSafeName(name, (p) -> !(reserved.contains(p.toLowerCase()) || otherMemberNames.contains(p.toLowerCase())));
 	}
 }
