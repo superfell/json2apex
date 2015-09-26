@@ -24,10 +24,4 @@ public class ${className} {
 	public static ${className} parse(String json) {
 		return (${className}) System.JSON.deserialize(json, ${className}.class);
 	}
-	
-	static testMethod void testParse() {
-		String json = '${json.escapeApex()}';
-		${className} obj = parse(json);
-		System.assert(obj != null);
-	}
 }

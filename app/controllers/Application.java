@@ -1,13 +1,27 @@
 package controllers;
 
-import play.*;
-import play.mvc.*;
-import play.data.validation.*;
-import org.codehaus.jackson.map.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
-import java.util.*;
-import models.*;
+import models.TypeFactory;
+
+import org.codehaus.jackson.map.ObjectMapper;
+
+import play.data.validation.Required;
+import play.data.validation.Validation;
+import play.mvc.Controller;
+import play.mvc.Http;
+import play.mvc.Scope;
+import play.mvc.results.RenderTemplate;
+import play.mvc.results.Result;
+import play.templates.Template;
+import play.templates.TemplateLoader;
 
 public class Application extends Controller {
 
@@ -27,17 +41,48 @@ public class Application extends Controller {
 			ObjectMapper m = new ObjectMapper();
 			Object o = m.readValue(json, Object.class);
 			TypeFactory factory = new TypeFactory();
-			ApexType root = factory.typeOfObject("Root", o);
-			Collection<ApexClass> classes = factory.getClasses();
-			request.format = "txt";
+	 		
+			Map<String, Object> templateBinding = new HashMap<>();
+	 		templateBinding.put("className", className);
+	 		templateBinding.put("json", json);
+	 		templateBinding.put("root", factory.typeOfObject("Root", o));
+	 		templateBinding.put("classes", factory.getClasses());
+	
 			if (createParseCode) {
-				renderTemplate("Application/makeApexWithParse.txt", className, json, root, classes);				
+				renderApexZip("makeApexWithParse.txt", "makeApexWithParseTest.txt", className, templateBinding);
 			} else {
-				render(className, json, root, classes);
+				renderApexZip("makeApex.txt", "makeApexTest.txt", className, templateBinding);
 			}			
 		} catch (IOException ex) {
 			flash.error("sorry, unable to parse your json: " + ex.getMessage());
-			index(json, className);
 		}
+		index(json, className);
     }
+ 	
+ 	static void renderApexZip(String primaryTemplate, String testCodeTemplate, String className, Map<String, Object> templateBinding) {
+ 		String test = applyTemplate("Application/" + testCodeTemplate, templateBinding);
+ 	 	String primary = applyTemplate("Application/" + primaryTemplate, templateBinding);
+ 		ByteArrayOutputStream os = new ByteArrayOutputStream();
+ 		ZipOutputStream zos = new ZipOutputStream(os);
+ 		ZipEntry pe = new ZipEntry(className + ".apxc");
+ 		try{
+	 		zos.putNextEntry(pe);
+	 		zos.write(primary.getBytes(StandardCharsets.UTF_8));
+	 		zos.closeEntry();
+	 		ZipEntry te = new ZipEntry(className + "_Test.apxc");
+	 		zos.putNextEntry(te);
+	 		zos.write(test.getBytes(StandardCharsets.UTF_8));
+	 		zos.closeEntry();
+	 		zos.close();
+	 		
+	 		renderBinary(new ByteArrayInputStream(os.toByteArray()), className + ".zip");
+ 		} catch (IOException ex) {
+ 			flash.error("sorry, unable to generate your apex code: " + ex.getMessage());
+ 		}
+ 	}
+ 	
+ 	static String applyTemplate(String templateName, Map<String, Object> args) {
+        Template template = TemplateLoader.load(templateName);
+        return template.render(args);
+ 	}
 }
