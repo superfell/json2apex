@@ -45,6 +45,15 @@ public class TypeFactory {
 		return classes.values();
 	}
 	
+	public boolean shouldGenerateExplictParse() {
+		for (ApexClass c : classes.values()) {
+			if (c.shouldGenerateExplictParse()) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	/** @return an ApexType that is the mapping of the json object instance 'o' */
 	public ApexType typeOfObject(String propertyName, Object o) {
 		if (o == null)

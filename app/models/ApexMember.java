@@ -26,6 +26,10 @@ public class ApexMember {
 		return "// in json: " + jsonFieldName;
 	}
 	
+	public boolean shouldGenerateExplictParse() {
+		return !jsonFieldName.equals(apexMemberName);
+	}
+	
 	@Override
 	public String toString() {
 		return jsonFieldName;

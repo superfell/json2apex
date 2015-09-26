@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import models.ApexType;
 import models.TypeFactory;
 
 import org.codehaus.jackson.map.ObjectMapper;
@@ -41,14 +42,17 @@ public class Application extends Controller {
 			ObjectMapper m = new ObjectMapper();
 			Object o = m.readValue(json, Object.class);
 			TypeFactory factory = new TypeFactory();
+	 		ApexType root = factory.typeOfObject("Root", o);
+	 		boolean needsParse = factory.shouldGenerateExplictParse();
 	 		
 			Map<String, Object> templateBinding = new HashMap<>();
 	 		templateBinding.put("className", className);
 	 		templateBinding.put("json", json);
-	 		templateBinding.put("root", factory.typeOfObject("Root", o));
+	 		templateBinding.put("root", root);
 	 		templateBinding.put("classes", factory.getClasses());
+	 		templateBinding.put("needsExplictParse", needsParse);
 	
-			if (createParseCode) {
+			if (createParseCode || needsParse) {
 				renderApexZip("makeApexWithParse.txt", "makeApexWithParseTest.txt", className, templateBinding);
 			} else {
 				renderApexZip("makeApex.txt", "makeApexTest.txt", className, templateBinding);
