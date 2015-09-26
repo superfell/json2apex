@@ -1,38 +1,14 @@
-html, body {
-    background: #364B66 !important;
-    font-family: Helvetica, Arial, Sans !important;
-}
 
-body {
-    width: 900px;
-    padding: 0 30px;
-    margin: auto;
-    color: #fefdfc;
-}
+.page-header-bg {
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#cfe7fa+0,6393c1+100 */
+	background: #cfe7fa; /* Old browsers */
+	background: -moz-linear-gradient(top,  #cfe7fa 0%, #6393c1 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cfe7fa), color-stop(100%,#6393c1)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #cfe7fa 0%,#6393c1 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #cfe7fa 0%,#6393c1 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #cfe7fa 0%,#6393c1 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #cfe7fa 0%,#6393c1 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cfe7fa', endColorstr='#6393c1',GradientType=0 ); /* IE6-9 */
 
-h1 {
-    background: #B8C569;
-    padding: 20px 30px 30px 20px;
-    margin: 20px 0;
-    color: #3C4313;
-    position: relative;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-}
-
-h3 {
-    background: #CFCFCF;
-   	color: #304040;
-    padding: 5px 6px 6px 5px;
-    margin: 20px 0;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-}
-
-textarea {
-	width:900px;
-}
-
-A {
-	color: #B8C569;
+	color:white;
 }

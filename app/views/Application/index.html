@@ -1,28 +1,52 @@
 #{extends 'main.html' /}
 #{set title:'Home' /}
 
+<br>
+<p>
 This tool will help generate strongly typed <a href="http://wiki.developerforce.com/page/App_Logic">Apex code</a> for parsing a JSON structure given an example of the JSON.
+</p>
+
+<div class="panel panel-primary">
+<div class="panel-heading"><h3 class="panel-title">Apex Generator</h3></div>
+<div class="panel-body">
 
 <form action="@{Application.makeApex()}" method="POST">
-	<h3>Paste your json here, e.g. { "user" : { "name" : "Simon Fell", "twitter" : "@superfell" } }</h3>
-	#{if flash.error}
-	    <p style="color:#c00">
-	        ${flash.error}
-	    </p>
-	#{/if}
+<div class="form-group">
+<h3>Paste your json here, e.g. { "user" : { "name" : "Simon Fell", "twitter" : "@superfell" } }</h3>
+#{if flash.error}
+    <div class="alert alert-danger" role="alert">
+        ${flash.error}
+    </div>
+#{/if}
 
-<textarea name="json" rows="10" cols="100">
+<textarea name="json" rows="10" cols="100" class="form-control">
 ${json}
 </textarea>
+</div>
 
-	<br/>
-	Name for the generated class : <input type="text" maxlength="32" value="${className}" name="className">
-	<br/>
-	Create explicit parse code : <input type="checkbox" name="createParseCode" />
-	<br/>
-    <input type="submit" value="Create Apex" />
+<div class="form-group">
+<label for="className">Name for the generated class:</label>
+<input type="text" id="className" maxlength="32" value="${className}" name="className" class="form-control">
+</div>
+	
+<div class="form-group">
+<input type="checkbox" id="createParseCode" name="createParseCode" />
+<label for="createParseCode">Create explicit parse code</label>
+</div>
+	
+<div class="form-group">
+   	<button type="submit" class="btn btn-lg btn-primary">Create Apex</button>
+</div>
+<span id="helpBlock" class="help-block">Clicking Create Apex will cause a zip file to be downloaded that contains the generated code, and a geneated test class.</span>
 </form>
+</div>
+</div>
 
-<br><br>
-Written by <a href="http://twitter.com/superfell">Superfell</a> &amp; <a href="http://twitter.com/metadaddy">Metadaddy</a>.
-Source code availabe @ <a href="https://github.com/superfell/json2apex">Github</a>
+<div class="panel panel-default">
+<div class="panel-heading"><h3 class="panel-title">About</h3></div>
+<div class="panel-body">
+<ul>
+<li>Written by <a href="https://twitter.com/superfell">Superfell</a> &amp; <a href="https://twitter.com/metadaddy">Metadaddy</a>.</li>
+</ul>
+</div>
+</div>
