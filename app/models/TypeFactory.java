@@ -57,21 +57,21 @@ public class TypeFactory {
 	/** @return an ApexType that is the mapping of the json object instance 'o' */
 	public ApexType typeOfObject(String propertyName, Object o) {
 		if (o == null)
-			return ApexPrimative.OBJECT;
+			return ApexPrimitive.OBJECT;
 		if (o instanceof List) 
 			return new ApexList(typeOfCollection(propertyName, (List)o));
 		if (o instanceof Map) 
 			return typeOfMap(propertyName, (Map)o);
 		if (o instanceof String) 
-			return ApexPrimative.STRING;
+			return ApexPrimitive.STRING;
 		if (o instanceof Integer) 
-			return ApexPrimative.INT;
+			return ApexPrimitive.INT;
 		if (o instanceof Long)
-			return ApexPrimative.LONG;
+			return ApexPrimitive.LONG;
 		if (o instanceof Double) 
-			return ApexPrimative.DOUBLE;
+			return ApexPrimitive.DOUBLE;
 		if (o instanceof Boolean) 
-			return ApexPrimative.BOOLEAN;
+			return ApexPrimitive.BOOLEAN;
 		
 		throw new RuntimeException("Unexpected type " + o.getClass() + " in TypeFactory.typeOfObject()");
 	}
