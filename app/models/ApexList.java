@@ -7,7 +7,7 @@ class ApexList extends ApexType {
 		this.itemType = itemType;
 	}
 	
-	private final ApexType itemType;
+	final ApexType itemType;
 
 	@Override
 	public String toString() {
