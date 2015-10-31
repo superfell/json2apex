@@ -94,6 +94,14 @@ public class TypeFactory {
   					apexClass.mergeFields(thisApexClass);
 
 					classes.remove(thisApexClass.toString());
+				} else if (itemType instanceof ApexPrimitive && thisItemType instanceof ApexPrimitive) {
+					ApexPrimitive a = (ApexPrimitive)itemType;
+					ApexPrimitive b = (ApexPrimitive)thisItemType;
+					if (a.canBePromotedTo(b)) {
+						itemType = b;
+					} else if (b.canBePromotedTo(a)) {
+						continue;
+					}
 				} else {
 					throw new RuntimeException("Can't add an " + o.getClass() + " to a collection of " + itemType.getClass());
   				}

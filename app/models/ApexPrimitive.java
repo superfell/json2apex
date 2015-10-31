@@ -26,6 +26,10 @@ public class ApexPrimitive extends ApexType {
 		return type.hashCode() + 1;
 	}
 
+	boolean canBePromotedTo(ApexPrimitive other) {
+		return (this.equals(INT)) && (other.equals(LONG));
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) return true;
