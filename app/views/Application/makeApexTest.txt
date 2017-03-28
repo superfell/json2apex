@@ -7,7 +7,7 @@ public class ${className}_Test {
 	
 	static testMethod void testParse() {
 		String json = '${json.escapeApex()}';
-		${className} obj = ${className}.parse(json);
+		${root} obj = ${className}.parse(json);
 		System.assert(obj != null);
 	}
 }

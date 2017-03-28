@@ -1,6 +1,6 @@
 package models;
 
-class ApexList extends ApexType {
+public class ApexList extends ApexType {
 	
 	ApexList(ApexType itemType) {
 		if (itemType == null) throw new NullPointerException();

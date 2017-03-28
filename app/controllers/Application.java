@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import models.ApexList;
 import models.ApexType;
 import models.TypeFactory;
 
@@ -42,7 +43,7 @@ public class Application extends Controller {
 			ObjectMapper m = new ObjectMapper();
 			Object o = m.readValue(json, Object.class);
 			TypeFactory factory = new TypeFactory();
-	 		ApexType root = factory.typeOfObject("Root", o);
+	 		ApexType root = factory.typeOfObject(className, o);
 	 		boolean needsParse = factory.shouldGenerateExplictParse();
 	 		
 			Map<String, Object> templateBinding = new HashMap<>();
@@ -51,6 +52,7 @@ public class Application extends Controller {
 	 		templateBinding.put("root", root);
 	 		templateBinding.put("classes", factory.getClasses());
 	 		templateBinding.put("needsExplictParse", needsParse);
+			templateBinding.put("isArray", root instanceof ApexList);
 	
 			if (createParseCode || needsParse) {
 				renderApexZip("makeApexWithParse.txt", "makeApexWithParseTest.txt", className, templateBinding);

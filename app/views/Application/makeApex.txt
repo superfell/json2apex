@@ -21,7 +21,7 @@ public class ${className} {
 
 #{/list}
 	
-	public static ${className} parse(String json) {
-		return (${className}) System.JSON.deserialize(json, ${className}.class);
+	public static ${root} parse(String json) {
+		return (${root}) System.JSON.deserialize(json, ${root}.class);
 	}
 }
