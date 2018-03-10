@@ -62,7 +62,10 @@ class JSON2ApexTester:
 		with zipfile.ZipFile(zipData, 'r') as z:
 			for zf in z.infolist():
 				with z.open(zf) as c:
-					scripts.append(c.read())
+					apexCode = c.read()
+					scripts.append(apexCode)
+					with open("results/{}.{}.{}".format(jsonFile, explicitParse, zf.filename), 'wb') as rf:
+						rf.write(apexCode)
 		
 		print ("Compiling {} scripts generated from {:32s} explicitParse:{:5s}".format(len(scripts), jsonFile, str(explicitParse)), end='')
 		res = svc.compileApex(scripts)
@@ -73,6 +76,7 @@ class JSON2ApexTester:
 					errors.append(str(p))
         
 		if len(errors) > 0:
+			print()
 			for s in scripts:
 				print(s.decode("utf-8"))
 			for e in errors:
