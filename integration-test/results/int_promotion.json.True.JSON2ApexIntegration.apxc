@@ -73,6 +73,7 @@ public class JSON2ApexIntegration {
 
     private static List<Long> arrayOfLong(System.JSONParser p) {
         List<Long> res = new List<Long>();
+        if (p.getCurrentToken() == null) p.nextToken();
         while (p.nextToken() != System.JSONToken.END_ARRAY) {
             res.add(p.getLongValue());
         }

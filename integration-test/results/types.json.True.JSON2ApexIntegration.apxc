@@ -98,6 +98,7 @@ public class JSON2ApexIntegration {
 
     private static List<String> arrayOfString(System.JSONParser p) {
         List<String> res = new List<String>();
+        if (p.getCurrentToken() == null) p.nextToken();
         while (p.nextToken() != System.JSONToken.END_ARRAY) {
             res.add(p.getText());
         }
@@ -109,6 +110,7 @@ public class JSON2ApexIntegration {
 
     private static List<Long> arrayOfLong(System.JSONParser p) {
         List<Long> res = new List<Long>();
+        if (p.getCurrentToken() == null) p.nextToken();
         while (p.nextToken() != System.JSONToken.END_ARRAY) {
             res.add(p.getLongValue());
         }
@@ -118,6 +120,7 @@ public class JSON2ApexIntegration {
 
     private static List<One_obj> arrayOfOne_obj(System.JSONParser p) {
         List<One_obj> res = new List<One_obj>();
+        if (p.getCurrentToken() == null) p.nextToken();
         while (p.nextToken() != System.JSONToken.END_ARRAY) {
             res.add(new One_obj(p));
         }
@@ -128,6 +131,7 @@ public class JSON2ApexIntegration {
 
     private static List<Integer> arrayOfInteger(System.JSONParser p) {
         List<Integer> res = new List<Integer>();
+        if (p.getCurrentToken() == null) p.nextToken();
         while (p.nextToken() != System.JSONToken.END_ARRAY) {
             res.add(p.getIntegerValue());
         }
@@ -138,6 +142,7 @@ public class JSON2ApexIntegration {
 
     private static List<Double> arrayOfDouble(System.JSONParser p) {
         List<Double> res = new List<Double>();
+        if (p.getCurrentToken() == null) p.nextToken();
         while (p.nextToken() != System.JSONToken.END_ARRAY) {
             res.add(p.getDoubleValue());
         }
@@ -148,6 +153,7 @@ public class JSON2ApexIntegration {
 
     private static List<Boolean> arrayOfBoolean(System.JSONParser p) {
         List<Boolean> res = new List<Boolean>();
+        if (p.getCurrentToken() == null) p.nextToken();
         while (p.nextToken() != System.JSONToken.END_ARRAY) {
             res.add(p.getBooleanValue());
         }

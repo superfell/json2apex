@@ -30,6 +30,7 @@ public class ApexList extends ApexType {
 		String myType = this.toString();
 		return String.format("    private static %s arrayOf%s(System.JSONParser p) {\n" + 
 			"        %s res = new %s();\n" + 
+			"        if (p.getCurrentToken() == null) p.nextToken();\n" +
 			"        while (p.nextToken() != System.JSONToken.END_ARRAY) {\n" + 
 			"            res.add(%s);\n" +
 			"        }\n" + 

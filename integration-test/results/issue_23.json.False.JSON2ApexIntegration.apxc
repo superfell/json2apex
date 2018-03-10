@@ -335,6 +335,7 @@ public class JSON2ApexIntegration {
 
     private static List<Additional_amounts> arrayOfAdditional_amounts(System.JSONParser p) {
         List<Additional_amounts> res = new List<Additional_amounts>();
+        if (p.getCurrentToken() == null) p.nextToken();
         while (p.nextToken() != System.JSONToken.END_ARRAY) {
             res.add(new Additional_amounts(p));
         }

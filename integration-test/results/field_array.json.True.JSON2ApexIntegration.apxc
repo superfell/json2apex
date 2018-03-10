@@ -70,6 +70,7 @@ public class JSON2ApexIntegration {
 
     private static List<Userinfo> arrayOfUserinfo(System.JSONParser p) {
         List<Userinfo> res = new List<Userinfo>();
+        if (p.getCurrentToken() == null) p.nextToken();
         while (p.nextToken() != System.JSONToken.END_ARRAY) {
             res.add(new Userinfo(p));
         }

@@ -70,6 +70,7 @@ public class JSON2ApexIntegration {
 
     private static List<JSON2ApexIntegration> arrayOfJSON2ApexIntegration(System.JSONParser p) {
         List<JSON2ApexIntegration> res = new List<JSON2ApexIntegration>();
+        if (p.getCurrentToken() == null) p.nextToken();
         while (p.nextToken() != System.JSONToken.END_ARRAY) {
             res.add(new JSON2ApexIntegration(p));
         }

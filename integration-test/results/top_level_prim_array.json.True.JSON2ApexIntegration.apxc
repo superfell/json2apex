@@ -4,28 +4,10 @@
 
 public class JSON2ApexIntegration {
 
-	public List<Double> numbers {get;set;} 
-
-	public JSON2ApexIntegration(JSONParser parser) {
-		while (parser.nextToken() != System.JSONToken.END_OBJECT) {
-			if (parser.getCurrentToken() == System.JSONToken.FIELD_NAME) {
-				String text = parser.getText();
-				if (parser.nextToken() != System.JSONToken.VALUE_NULL) {
-					if (text == 'numbers') {
-						numbers = arrayOfDouble(parser);
-					} else {
-						System.debug(LoggingLevel.WARN, 'JSON2ApexIntegration consuming unrecognized property: '+text);
-						consumeObject(parser);
-					}
-				}
-			}
-		}
-	}
 	
-	
-	public static JSON2ApexIntegration parse(String json) {
+	public static List<Double> parse(String json) {
 		System.JSONParser parser = System.JSON.createParser(json);
-		return new JSON2ApexIntegration(parser);
+		return arrayOfDouble(parser);
 	}
 	
 	public static void consumeObject(System.JSONParser parser) {
@@ -50,7 +32,6 @@ public class JSON2ApexIntegration {
         }
         return res;
     }
-
 
 
 
