@@ -73,12 +73,16 @@ class JSON2ApexTester:
 						rf.write(apexCode)
 		
 		print ("Compiling {} classes generated from {:32s} explicitParse:{:5s}".format(len(scripts), jsonFile, str(explicitParse)), end='')
-		res = svc.compileApex(scripts)
+		res = svc.compileApexAndTest(scripts, ["JSON2ApexIntegration", "JSON2ApexIntegration_Test"])
 		errors = []
-		for r in res:
+		for r in res[apex.classes:]:
 			if str(r[apex.success]) == "false":
 				errors.append("{}:{}: {}".format(str(r[apex.line]), str(r[apex.column]), str(r[apex.problem]) ))
-        
+		
+		if str(res[apex.runTestsResult][apex.numFailures]) != "0":
+			for f in res[apex.runTestsResult][apex.failures:]:
+				errors.append("test failure: {} @ {}".format(str(f[apex.message]), str(f[apex.stackTrace])))
+				
 		if len(errors) > 0:
 			print(" \u2718 failed")
 			for s in scripts:

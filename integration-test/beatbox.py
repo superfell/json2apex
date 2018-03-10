@@ -81,9 +81,6 @@ class Client(object):
     def logout(self):
         return LogoutRequest(self.__serverUrl, self.sessionId).post(self.__conn, True)
 
-    def compileApex(self, scripts):
-        return CompileClassRequest(self.__serverUrl.replace("/Soap/u/", "/Soap/s/"), self.sessionId, scripts).post()
-		
     # set the batchSize property on the Client instance to change the batchsize for query/queryMore
     def query(self, soql):
         return QueryRequest(self.__serverUrl, self.sessionId, self.batchSize, soql).post(self.__conn)
@@ -182,6 +179,12 @@ class Client(object):
         return AuthenticatedRequest(self.__serverUrl, self.sessionId, "getUserInfo").post(self.__conn)
 
     # def convertLead(self, convertLeads):
+	
+    def compileApex(self, scripts):
+        return CompileClassRequest(self.__serverUrl.replace("/Soap/u/", "/Soap/s/"), self.sessionId, scripts).post()
+		
+    def compileApexAndTest(self, classes, classNamesToTest):
+        return CompileAndTestRequest(self.__serverUrl.replace("/Soap/u/", "/Soap/s/"), self.sessionId, classes, classNamesToTest).post()
 
 
 class IterClient(Client):
@@ -448,6 +451,7 @@ class SoapEnvelope(object):
         if close:
             conn.close()
         string_response = rawResponse.decode('utf-8') if PY3 else rawResponse
+        # print(string_response)
         tramp = xmltramp.parse(string_response)
         try:
             faultString = str(tramp[_tSoapNS.Body][_tSoapNS.Fault].faultstring)
@@ -736,3 +740,20 @@ class CompileClassRequest(AuthenticatedRequest):
 
     def writeBody(self, s):
         s.writeStringElement(_apexNs, "scripts", self.__scripts)
+
+
+class CompileAndTestRequest(AuthenticatedRequest):
+    def __init__(self, serverUrl, sessionId, classes, classNamesToTest):
+        AuthenticatedRequest.__init__(self, serverUrl, sessionId, "compileAndTest")
+        self.__classes = classes
+        self.__classNamesToTest = classNamesToTest
+
+    def writeBody(self, s):
+        s.startElement(_apexNs, "CompileAndTestRequest")
+        s.writeStringElement(_apexNs, "checkOnly", "false")
+        s.writeStringElement(_apexNs, "classes", self.__classes)
+        s.startElement(_apexNs, "runTestsRequest")
+        s.writeStringElement(_apexNs, "allTests", "false")
+        s.writeStringElement(_apexNs, "classes", self.__classNamesToTest)
+        s.endElement()
+        s.endElement()
