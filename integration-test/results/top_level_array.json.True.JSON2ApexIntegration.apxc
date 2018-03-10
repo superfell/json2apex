@@ -4,21 +4,21 @@
 
 public class JSON2ApexIntegration {
 
-	public class CreatedBy {
+	public class Userinfo {
 		public String name {get;set;} 
-		public String username {get;set;} 
+		public String twitter {get;set;} 
 
-		public CreatedBy(JSONParser parser) {
+		public Userinfo(JSONParser parser) {
 			while (parser.nextToken() != System.JSONToken.END_OBJECT) {
 				if (parser.getCurrentToken() == System.JSONToken.FIELD_NAME) {
 					String text = parser.getText();
 					if (parser.nextToken() != System.JSONToken.VALUE_NULL) {
 						if (text == 'name') {
 							name = parser.getText();
-						} else if (text == 'username') {
-							username = parser.getText();
+						} else if (text == 'twitter') {
+							twitter = parser.getText();
 						} else {
-							System.debug(LoggingLevel.WARN, 'CreatedBy consuming unrecognized property: '+text);
+							System.debug(LoggingLevel.WARN, 'Userinfo consuming unrecognized property: '+text);
 							consumeObject(parser);
 						}
 					}
@@ -27,18 +27,15 @@ public class JSON2ApexIntegration {
 		}
 	}
 	
-	public CreatedBy createdBy {get;set;} 
-	public CreatedBy modifiedBy {get;set;} 
+	public Userinfo userinfo {get;set;} 
 
 	public JSON2ApexIntegration(JSONParser parser) {
 		while (parser.nextToken() != System.JSONToken.END_OBJECT) {
 			if (parser.getCurrentToken() == System.JSONToken.FIELD_NAME) {
 				String text = parser.getText();
 				if (parser.nextToken() != System.JSONToken.VALUE_NULL) {
-					if (text == 'createdBy') {
-						createdBy = new CreatedBy(parser);
-					} else if (text == 'modifiedBy') {
-						modifiedBy = new CreatedBy(parser);
+					if (text == 'userinfo') {
+						userinfo = new Userinfo(parser);
 					} else {
 						System.debug(LoggingLevel.WARN, 'JSON2ApexIntegration consuming unrecognized property: '+text);
 						consumeObject(parser);
@@ -49,9 +46,9 @@ public class JSON2ApexIntegration {
 	}
 	
 	
-	public static JSON2ApexIntegration parse(String json) {
+	public static List<JSON2ApexIntegration> parse(String json) {
 		System.JSONParser parser = System.JSON.createParser(json);
-		return new JSON2ApexIntegration(parser);
+		return arrayOfJSON2ApexIntegration(parser);
 	}
 	
 	public static void consumeObject(System.JSONParser parser) {
@@ -69,6 +66,15 @@ public class JSON2ApexIntegration {
 	}
 	
 
+
+
+    private static List<JSON2ApexIntegration> arrayOfJSON2ApexIntegration(System.JSONParser p) {
+        List<JSON2ApexIntegration> res = new List<JSON2ApexIntegration>();
+        while (p.nextToken() != System.JSONToken.END_ARRAY) {
+            res.add(new JSON2ApexIntegration(p));
+        }
+        return res;
+    }
 
 
 }

@@ -11,7 +11,7 @@ public class JSON2ApexIntegration {
 		public String name {get;set;} 
 		public String twitter {get;set;} 
 
-	public User_info(JSONParser parser) {
+		public User_info(JSONParser parser) {
 			while (parser.nextToken() != System.JSONToken.END_OBJECT) {
 				if (parser.getCurrentToken() == System.JSONToken.FIELD_NAME) {
 					String text = parser.getText();
@@ -50,7 +50,8 @@ public class JSON2ApexIntegration {
 	
 	
 	public static JSON2ApexIntegration parse(String json) {
-		return new JSON2ApexIntegration(System.JSON.createParser(json));
+		System.JSONParser parser = System.JSON.createParser(json);
+		return new JSON2ApexIntegration(parser);
 	}
 	
 	public static void consumeObject(System.JSONParser parser) {

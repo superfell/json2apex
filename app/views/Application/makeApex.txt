@@ -5,7 +5,7 @@
 public class ${className} {
 
 #{list items:classes, as:'cls'}
-#{if !cls.equals(root) }
+#{if !cls.className.equals(className) }
 #{set 'indent'}	#{/set}
 	public class ${cls} {
 #{/if}
@@ -15,13 +15,14 @@ public class ${className} {
 #{list items:cls.members.entrySet(), as:'m'}
 #{get 'indent' /}	public ${m.value} ${m.key};
 #{/list}
-#{if !cls.equals(root) }
+#{if !cls.className.equals(className) }
 	}
 #{/if}
 
 #{/list}
 	
-	public static ${className} parse(String json) {
-		return (${className}) System.JSON.deserialize(json, ${className}.class);
+*{ this uses root instead of className to handle the case where the root type isn't a class, e.g. its a List<Foo> }*
+	public static ${root} parse(String json) {
+		return (${root}) System.JSON.deserialize(json, ${root}.class);
 	}
 }

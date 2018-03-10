@@ -10,7 +10,7 @@ public class ApexPrimitive extends ApexType {
 	public static ApexPrimitive BOOLEAN= new ApexPrimitive("Boolean", "{p}.getBooleanValue()");
 	public static ApexPrimitive LONG   = new ApexPrimitive("Long",    "{p}.getLongValue()");
 	
-	public static ApexPrimitive OBJECT = new ApexPrimitive("Object",  "new Object()");
+	public static ApexPrimitive OBJECT = new ApexPrimitive("Object",  "{p}.readValueAs(Object.class)");
 	
 	private ApexPrimitive(String primativeType, String parserMethod) {
 		if (primativeType == null) throw new NullPointerException();

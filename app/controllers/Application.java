@@ -47,13 +47,12 @@ public class Application extends Controller {
 	 		boolean needsParse = factory.shouldGenerateExplictParse();
 	 		
 			Map<String, Object> templateBinding = new HashMap<>();
-	 		templateBinding.put("className", root.toString());
+	 		templateBinding.put("className", className);
 	 		templateBinding.put("json", json);
 	 		templateBinding.put("root", root);
 	 		templateBinding.put("classes", factory.getClasses());
 			templateBinding.put("types", factory.allTypes());
 	 		templateBinding.put("needsExplictParse", needsParse);
-			templateBinding.put("isArray", root instanceof ApexList);
 	
 			if (createParseCode || needsParse) {
 				renderApexZip("makeApexWithParse.txt", "makeApexWithParseTest.txt", className, templateBinding);

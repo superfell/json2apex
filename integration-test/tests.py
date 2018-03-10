@@ -72,16 +72,15 @@ class JSON2ApexTester:
 					with open("results/{}.{}.{}".format(jsonFile, explicitParse, zf.filename), 'wb') as rf:
 						rf.write(apexCode)
 		
-		print ("Compiling {} scripts generated from {:32s} explicitParse:{:5s}".format(len(scripts), jsonFile, str(explicitParse)), end='')
+		print ("Compiling {} classes generated from {:32s} explicitParse:{:5s}".format(len(scripts), jsonFile, str(explicitParse)), end='')
 		res = svc.compileApex(scripts)
 		errors = []
 		for r in res:
 			if str(r[apex.success]) == "false":
-				for p in r[apex.problem]:
-					errors.append(str(p))
+				errors.append("{}:{}: {}".format(str(r[apex.line]), str(r[apex.column]), str(r[apex.problem]) ))
         
 		if len(errors) > 0:
-			print()
+			print(" \u2718 failed")
 			for s in scripts:
 				print(s.decode("utf-8"))
 			for e in errors:

@@ -8,12 +8,12 @@ public class ${className}_Test {
 	// This test method should give 100% coverage
 	static testMethod void testParse() {
 		String json = '${json.escapeApex()}';
-		${className} r = ${className}.parse(json);
+		${root} r = ${className}.parse(json);
 		System.assert(r != null);
 #{list items:classes, as:'cls'}
 
 		json = '{\"TestAMissingObject\": { \"TestAMissingArray\": [ { \"TestAMissingProperty\": \"Some Value\" } ] } }';
-#{if cls.equals(root)}
+#{if cls.className.equals(className)}
 		${className} obj${cls} = new ${className}(System.JSON.createParser(json));
 #{/if}
 #{else}

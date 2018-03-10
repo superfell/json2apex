@@ -10,7 +10,7 @@
 public class ${className} {
 
 #{list items:classes, as:'cls'}
-#{if !cls.equals(root)}
+#{if !cls.className.equals(className)}
 #{set 'indent'}	#{/set}
 	public class ${cls} {
 #{/if}
@@ -21,7 +21,7 @@ public class ${className} {
 #{get 'indent' /}	public ${m.value} ${m.key.apexMemberName} {get;set;} ${m.key.memberComment}
 #{/list}
 
-	public ${cls}(JSONParser parser) {
+#{get 'indent' /}	public ${cls}(JSONParser parser) {
 #{get 'indent' /}		while (parser.nextToken() != System.JSONToken.END_OBJECT) {
 #{get 'indent' /}			if (parser.getCurrentToken() == System.JSONToken.FIELD_NAME) {
 #{get 'indent' /}				String text = parser.getText();
@@ -37,14 +37,16 @@ if (text == '${m.key.jsonFieldName}') {
 #{get 'indent' /}			}
 #{get 'indent' /}		}
 #{get 'indent' /}	}
-#{if !cls.equals(root)}
+#{if !cls.className.equals(className)}
 	}
 #{/if}
 	
 #{/list}
 	
-	public static ${className} parse(String json) {
-		return new ${className}(System.JSON.createParser(json));
+*{ this uses root instead of className to handle the case where the root type isn't a class, e.g. its a List<Foo> }*
+	public static ${root} parse(String json) {
+		System.JSONParser parser = System.JSON.createParser(json);
+		return ${root.getParserExpr("parser")};
 	}
 	
 	public static void consumeObject(System.JSONParser parser) {
