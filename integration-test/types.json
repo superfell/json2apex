@@ -1,0 +1,16 @@
+{
+	"one_string" : "Hello",
+	"one_int": 1,
+	"one_double" : 1.1,
+	"one_long": 9223372036854775807,
+	"one_bool": true,
+	"one_obj" : { "hello" : "world "},
+	
+	"string_a" : [ "world" ],
+	"int_a": [1],
+	"double_a" : [1.1],
+	"long_a": [9223372036854775807],
+	"bool_a": [true],
+	"obj_a" : [{ "hello" : "world "}]
+	
+}
