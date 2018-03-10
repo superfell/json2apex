@@ -22,8 +22,13 @@ class JSON2ApexTester:
 		loginResult = svc.login(username, password)
 		print("Logged in at {}".format(str(loginResult[sf.serverUrl])))
 
+	def cleanresults(self):
+		for f in os.listdir("results"):
+			os.remove("results/" + f)
+			
 	def runtests(self):
 		skipped = []
+		self.cleanresults()
 		for f in os.listdir("."):
 			if f.endswith(".json"):
 				if not self.test(f, False):
