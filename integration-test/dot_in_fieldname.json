@@ -1,0 +1,13 @@
+{
+"refresh_token_expires_in" : "0",
+"developer.email" : "superfell@example.com",
+"token_type" : "BearerToken",
+"issued_at" : "1520478821362",
+"client_id" : "redacted",
+"access_token" : "kRxqmPr2b223uzTUGnndQhXWv8F4",
+"application_name" : "redacted-id",
+"scope" : "",
+"expires_in" : "3599",
+"refresh_count" : "0",
+"status" : "approved"
+}

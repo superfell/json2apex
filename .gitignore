@@ -7,3 +7,6 @@
 /.project
 /.settings
 /eclipse/classes
+/integration-test/__pycache__
+*.pyc
+
