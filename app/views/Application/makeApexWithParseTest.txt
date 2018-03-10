@@ -13,7 +13,7 @@ public class ${className}_Test {
 #{list items:classes, as:'cls'}
 
 		json = '{\"TestAMissingObject\": { \"TestAMissingArray\": [ { \"TestAMissingProperty\": \"Some Value\" } ] } }';
-#{if cls.toString() == 'Root'}
+#{if cls.equals(root)}
 		${className} obj${cls} = new ${className}(System.JSON.createParser(json));
 #{/if}
 #{else}

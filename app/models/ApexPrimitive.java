@@ -1,20 +1,25 @@
 package models;
 
+import java.util.Objects;
+
 public class ApexPrimitive extends ApexType {
 
-	public static ApexPrimitive STRING = new ApexPrimitive("String");
-	public static ApexPrimitive INT    = new ApexPrimitive("Integer");
-	public static ApexPrimitive DOUBLE = new ApexPrimitive("Double");
-	public static ApexPrimitive BOOLEAN= new ApexPrimitive("Boolean");
-	public static ApexPrimitive LONG   = new ApexPrimitive("Long");
-	public static ApexPrimitive OBJECT = new ApexPrimitive("Object");
+	public static ApexPrimitive STRING = new ApexPrimitive("String",  "{p}.getText()");
+	public static ApexPrimitive INT    = new ApexPrimitive("Integer", "{p}.getIntegerValue()");
+	public static ApexPrimitive DOUBLE = new ApexPrimitive("Double",  "{p}.getDoubleValue()");
+	public static ApexPrimitive BOOLEAN= new ApexPrimitive("Boolean", "{p}.getBooleanValue()");
+	public static ApexPrimitive LONG   = new ApexPrimitive("Long",    "{p}.getLongValue()");
 	
-	private ApexPrimitive(String primativeType) {
+	public static ApexPrimitive OBJECT = new ApexPrimitive("Object",  "new Object()");
+	
+	private ApexPrimitive(String primativeType, String parserMethod) {
 		if (primativeType == null) throw new NullPointerException();
 		this.type = primativeType;
+		this.parserMethod = parserMethod;
 	}
 	
 	private final String type;
+	private final String parserMethod;
 
 	@Override
 	public String toString() {
@@ -23,9 +28,19 @@ public class ApexPrimitive extends ApexType {
 	
 	@Override
 	public int hashCode() {
-		return type.hashCode() + 1;
+		return Objects.hash(type, parserMethod);
 	}
 
+	@Override
+	public String getParserExpr(String parserName) {
+		return parserMethod.replace("{p}", parserName);
+	}
+	
+	@Override
+	public String additionalMethods() {
+		return "";
+	}
+	
 	boolean canBePromotedTo(ApexPrimitive other) {
 		return (this.equals(INT)) && (other.equals(LONG));
 	}

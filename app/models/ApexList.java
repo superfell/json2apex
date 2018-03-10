@@ -1,5 +1,7 @@
 package models;
 
+import java.util.Objects;
+
 public class ApexList extends ApexType {
 	
 	ApexList(ApexType itemType) {
@@ -19,11 +21,26 @@ public class ApexList extends ApexType {
 	}
 	
 	@Override
+	public String getParserExpr(String parserName) {
+		return String.format("arrayOf%s(%s)", itemType.toString(), parserName);
+	}
+	
+	@Override
+	public String additionalMethods() {
+		String myType = this.toString();
+		return String.format("    private static %s arrayOf%s(System.JSONParser p) {\n" + 
+			"        %s res = new %s();\n" + 
+			"        while (p.nextToken() != System.JSONToken.END_ARRAY) {\n" + 
+			"            res.add(%s);\n" +
+			"        }\n" + 
+			"        return res;\n" +
+			"    }\n\n",
+				myType, this.itemType.toString(), myType, myType, itemType.getParserExpr("p"));
+	}
+	
+	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + itemType.hashCode();
-		return result;
+		return Objects.hash(itemType);
 	}
 
 	@Override

@@ -20,6 +20,16 @@ public class ApexClass extends ApexType {
 		return members;
 	}
 	
+	@Override
+	public String getParserExpr(String parserName) {
+		return String.format("new %s(%s)", className, parserName);
+	}
+	
+	@Override
+	public String additionalMethods() {
+		return "";
+	}
+	
 	public boolean shouldGenerateExplictParse() {
 		for (ApexMember m : members.keySet()) {
 			if (m.shouldGenerateExplictParse()) {

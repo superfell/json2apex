@@ -37,12 +37,18 @@ public class TypeFactory {
 
 	public TypeFactory() {
 		this.classes = new HashMap<String, ApexClass>();
+		this.allTypes = new HashSet<ApexType>();
 	}
 
 	private final HashMap<String, ApexClass> classes;
+	private final HashSet<ApexType> allTypes;
 	
 	public Collection<ApexClass> getClasses() {
 		return classes.values();
+	}
+	
+	public Collection<ApexType> allTypes() {
+		return allTypes;
 	}
 	
 	public boolean shouldGenerateExplictParse() {
@@ -56,6 +62,13 @@ public class TypeFactory {
 	
 	/** @return an ApexType that is the mapping of the json object instance 'o' */
 	public ApexType typeOfObject(String propertyName, Object o) {
+		ApexType t = typeOfObjectImpl(propertyName, o);
+		allTypes.add(t);
+		return t;
+	}
+	
+	/** @return an ApexType that is the mapping of the json object instance 'o' */
+	private ApexType typeOfObjectImpl(String propertyName, Object o) {
 		if (o == null)
 			return ApexPrimitive.OBJECT;
 		if (o instanceof List) 
@@ -141,6 +154,9 @@ public class TypeFactory {
 	
 	private String getClassName(String proposed) {
 		proposed = proposed.replace(".", "_");
+		if (proposed.length() > 1 && proposed.charAt(0) == '_') {
+			proposed = proposed.substring(1);
+		}
 		proposed = proposed.length() > 1 ? proposed.substring(0, 1).toUpperCase() + proposed.substring(1) : proposed;
 		return getSafeName(proposed, (p) -> !(classes.containsKey(p) || reserved.contains(p.toLowerCase())));
 	}
