@@ -64,7 +64,11 @@ public class ApexClass extends ApexType {
 	
 	void mergeFields(ApexClass other) {
 		for (ApexMember key : other.getMembers().keySet() ) {
-			if (members.get(key) == null) {
+			if (members.get(key) instanceof ApexClass && other.getMembers().get(key) instanceof ApexClass) {
+				((ApexClass) members.get(key)).mergeFields((ApexClass) other.getMembers().get(key));
+			}
+
+			if (members.get(key) == null || members.get(key) == ApexPrimitive.OBJECT) {
 				members.put(key, other.getMembers().get(key));
 			}
 		}
