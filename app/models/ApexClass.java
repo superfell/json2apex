@@ -13,24 +13,24 @@ public class ApexClass extends ApexType {
 		this.className = className;
 		this.members = members;
 	}
-	
+
 	private final String className;
 	private final Map<ApexMember, ApexType> members;
-	
+
 	public Map<ApexMember, ApexType> getMembers() {
 		return members;
 	}
-	
+
 	@Override
 	public String getParserExpr(String parserName) {
 		return String.format("new %s(%s)", className, parserName);
 	}
-	
+
 	@Override
 	public String additionalMethods() {
 		return "";
 	}
-	
+
 	public boolean shouldGenerateExplictParse() {
 		for (ApexMember m : members.keySet()) {
 			if (m.shouldGenerateExplictParse()) {
@@ -39,7 +39,7 @@ public class ApexClass extends ApexType {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public String toString() {
 		return className;
@@ -56,16 +56,41 @@ public class ApexClass extends ApexType {
 		if (obj == null) return false;
 		if (getClass() != obj.getClass()) return false;
 		ApexClass other = (ApexClass) obj;
-		return className.equals(other.className);
+		return membersEqual(other.members);
 	}
-	
-	/** @return true if this map of members equals our map of members */
-	boolean membersEqual(Map<ApexMember, ApexType> other) {
-		return members.equals(other);
+
+	/** @return true if every member of our type is equal to every member of the given type and if
+	all members in our type are present in the other type. Otherwise returns false. **/
+	boolean membersEqual(Map<ApexMember, ApexType> otherMembers) {
+		for (Map.Entry<ApexMember, ApexType> entry : this.members.entrySet()) {
+			ApexMember memberName = entry.getKey();
+			ApexType member = entry.getValue();
+
+			if (otherMembers.get(memberName) == null) {
+				return false;
+			} else {
+				ApexType otherMember = otherMembers.get(memberName);
+				if (!member.equals(otherMember)) {
+					return false;
+				}
+			}
+		}
+
+		return true;
 	}
-	
+
 	Set<String> mergeFields(ApexClass other) {
 		Set<String> classesToRemove = new HashSet<>();
+
+		// Nothing needs to be done if the class being merged is the same as our class already.
+		if (this.equals(other)) {
+			return classesToRemove;
+		}
+
+		// If the object being merged has zero members then we should just discard it.
+		if (other.getMembers().size() == 0) {
+			classesToRemove.add(other.toString());
+		}
 
 		for (ApexMember key : other.getMembers().keySet() ) {
 			// If our member is an array and the other member is also an array check the item types of
