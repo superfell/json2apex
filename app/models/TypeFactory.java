@@ -103,10 +103,11 @@ public class TypeFactory {
 				if (itemType instanceof ApexClass && thisItemType instanceof ApexClass) {
 					ApexClass apexClass = (ApexClass)itemType;
 					ApexClass thisApexClass = (ApexClass)thisItemType;
-					
-  					apexClass.mergeFields(thisApexClass);
 
-					classes.remove(thisApexClass.toString());
+  					Set<String> classesToRemove = apexClass.mergeFields(thisApexClass);
+					for (String k : classesToRemove) {
+						classes.remove(k);
+					}
 				} else if (itemType instanceof ApexPrimitive && thisItemType instanceof ApexPrimitive) {
 					ApexPrimitive a = (ApexPrimitive)itemType;
 					ApexPrimitive b = (ApexPrimitive)thisItemType;
