@@ -47,7 +47,7 @@ public class ApexClass extends ApexType {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(className, members);
+		return Objects.hash(className);
 	}
 
 	@Override
@@ -82,11 +82,6 @@ public class ApexClass extends ApexType {
 
 	Set<String> mergeFields(ApexClass other) {
 		Set<String> classesToRemove = new HashSet<>();
-
-		// Nothing needs to be done if the class being merged is the same as our class already.
-		if (this.equals(other)) {
-			return classesToRemove;
-		}
 
 		// If the object being merged has zero members then we should just discard it.
 		if (other.getMembers().size() == 0) {

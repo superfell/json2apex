@@ -28,7 +28,7 @@ public class ApexPrimitive extends ApexType {
 	
 	@Override
 	public int hashCode() {
-		return Objects.hash(type, parserMethod);
+		return Objects.hash(type);
 	}
 
 	@Override
