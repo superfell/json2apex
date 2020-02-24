@@ -49,8 +49,10 @@ public class ApexPrimitive extends ApexType {
 	public boolean equals(Object obj) {
 		if (this == obj) return true;
 		if (obj == null) return false;
+		if (this.type.equals("Object")) return true;
 		if (getClass() != obj.getClass()) return false;
+
 		ApexPrimitive other = (ApexPrimitive) obj;
-		return type.equals(other.type);
+		return other.type.equals("Object") || type.equals(other.type);
 	}
 }

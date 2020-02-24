@@ -106,9 +106,12 @@ public class TypeFactory {
 
 					// Merge in both directions (for object-overwrite)
 					thisApexClass.mergeFields(apexClass);
-  					apexClass.mergeFields(thisApexClass);
+  					Set<String> classesToRemove = apexClass.mergeFields(thisApexClass);
 
-  					// TODO: Re-implement class removal logic
+  					for (String className : classesToRemove) {
+  						classes.remove(className);
+					}
+
 				} else if (itemType instanceof ApexPrimitive && thisItemType instanceof ApexPrimitive) {
 					ApexPrimitive a = (ApexPrimitive)itemType;
 					ApexPrimitive b = (ApexPrimitive)thisItemType;
@@ -128,13 +131,15 @@ public class TypeFactory {
 	/** @return an ApexClass for this map */
 	ApexType typeOfMap(String propertyName, Map o) {
 		Map<ApexMember, ApexType> members = makeMembers(o);
-		// see if any existing classes have the same member set
-		for (ApexClass cls : classes.values()) {
-			if (cls.membersEqual(members))
-				return cls; 
-		}
 		String newClassName = getClassName(propertyName);
 		ApexClass newClass = new ApexClass(newClassName, members);
+
+		// see if any existing classes have the same member set
+		for (ApexClass cls : classes.values()) {
+			if (newClass.membersEqual(cls.getMembers()))
+				return cls; 
+		}
+
 		classes.put(newClassName, newClass);
 		return newClass;
 	}

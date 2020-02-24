@@ -54,7 +54,8 @@ public class ApexClass extends ApexType {
 	public boolean equals(Object obj) {
 		if (this == obj) return true;
 		if (obj == null) return false;
-		if (getClass() != obj.getClass()) return false;
+		if(obj.toString().equals("Object")) return true;
+		if (!(obj instanceof ApexClass)) return false;
 		ApexClass other = (ApexClass) obj;
 		return membersEqual(other.members);
 	}
