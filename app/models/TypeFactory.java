@@ -154,9 +154,12 @@ public class TypeFactory {
 	
 	private String getClassName(String proposed) {
 		proposed = proposed.replace(".", "_");
+		proposed = proposed.replace("-", "_");
+
 		if (proposed.length() > 1 && proposed.charAt(0) == '_') {
 			proposed = proposed.substring(1);
 		}
+
 		proposed = proposed.length() > 1 ? proposed.substring(0, 1).toUpperCase() + proposed.substring(1) : proposed;
 		return getSafeName(proposed, (p) -> !(classes.containsKey(p) || reserved.contains(p.toLowerCase())));
 	}
@@ -180,9 +183,12 @@ public class TypeFactory {
 	// returns a version of name that's safe to use as an apex class member name
 	String getApexMemberName(String name, Set<String> otherMemberNames) {
 		name = name.replace(".", "_");
+		name = name.replace("-", "_");
+
 		if (name.startsWith("_")) {
 			return getSafeName("x" + name, (p) -> !(reserved.contains(p.toLowerCase()) || otherMemberNames.contains(p.toLowerCase())));
 		}
+
 		if (!reserved.contains(name.toLowerCase())) {
 			return name;
 		}
