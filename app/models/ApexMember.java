@@ -6,7 +6,7 @@ import java.util.Objects;
 	ApexMember track the name of a json field / apex class member
 	in particular it handles the fact that the apex member name might
 	be different to the json field name if the json field name clashes
-	with a reserved work in apex.
+	with a reserved word in apex.
 */
 public class ApexMember {
 	
