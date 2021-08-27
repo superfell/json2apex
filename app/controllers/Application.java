@@ -1,5 +1,14 @@
 package controllers;
 
+import models.ApexType;
+import models.TypeFactory;
+import org.codehaus.jackson.map.ObjectMapper;
+import play.data.validation.Required;
+import play.data.validation.Validation;
+import play.mvc.Controller;
+import play.templates.Template;
+import play.templates.TemplateLoader;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -8,22 +17,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
-import models.ApexList;
-import models.ApexType;
-import models.TypeFactory;
-
-import org.codehaus.jackson.map.ObjectMapper;
-
-import play.data.validation.Required;
-import play.data.validation.Validation;
-import play.mvc.Controller;
-import play.mvc.Http;
-import play.mvc.Scope;
-import play.mvc.results.RenderTemplate;
-import play.mvc.results.Result;
-import play.templates.Template;
-import play.templates.TemplateLoader;
 
 public class Application extends Controller {
 
