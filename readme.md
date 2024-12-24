@@ -1,13 +1,18 @@
 # JSON2Apex
 
-This app allows a user to paste in an instance of a json document, and have it generate strongly typed apex code that can deserialize it.
+This app allows a user to paste in an instance of a json document, and have it generate strongly typed Apex code that can deserialize it.
 
-Its written in Java using the Play! framework, if you want to try it out, its running at http://json2apex.herokuapp.com
+Its written in Java using the Play! framework.
 
+For many years it was available at https://json2apex.herokuapp.com however Heroku discontinued the free tier and its no longer online there.
+
+You can run the tool locally via docker with
+
+`docker run  -p 9091:9091 -d  ghcr.io/superfell/json2apex:latest`
+
+once running open your browser at http://localhost:9091
 
 JSON2Apex is open source under the MIT license.
-
-
 
 ## About integration-tests
 
@@ -17,10 +22,10 @@ error, that's logged in the test runner output.
 
 the test runner requires python3 and a salesforce developer edition org.
 
-*Warning, it'll overwrite any class called JSON2ApexIntegration[_Test] you might have*
+_Warning, it'll overwrite any class called JSON2ApexIntegration[_Test] you might have_
 
 run the integration tests from the integration-test folder with
-    
+
     python3 tests.py <sfdc_username> <sfdc_password>
 
 you'll get output similar to
