@@ -6,7 +6,9 @@ Its written in Java using the Play! framework.
 
 For many years it was available at https://json2apex.herokuapp.com however Heroku discontinued the free tier and its no longer online there.
 
-You can run the tool locally via docker with
+You can now access it instead at https://superfell.com/json2apex
+
+Or you can run it locally via docker with
 
 `docker run  -p 9091:9091 -d  ghcr.io/superfell/json2apex:latest`
 
