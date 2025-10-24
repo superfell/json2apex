@@ -48,8 +48,15 @@ public class ApexList extends ApexType {
 	public boolean equals(Object obj) {
 		if (this == obj) return true;
 		if (obj == null) return false;
+		if (obj.toString().equals("Object")) return true;
 		if (getClass() != obj.getClass()) return false;
+
 		ApexList other = (ApexList) obj;
+
+		if (itemType instanceof  ApexClass && other.itemType instanceof ApexClass) {
+			return ((ApexClass) itemType).membersEqual(((ApexClass) other.itemType).getMembers());
+		}
+
 		return itemType.equals(other.itemType);
 	}
 }

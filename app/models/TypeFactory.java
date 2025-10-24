@@ -88,51 +88,63 @@ public class TypeFactory {
 		
 		throw new RuntimeException("Unexpected type " + o.getClass() + " in TypeFactory.typeOfObject()");
 	}
-	
+
 	/** @return a concrete type if all the list items are of the same type, Object, otherwise */
 	ApexType typeOfCollection(String propertyName, Collection<?> col) {
 		if (col == null || col.size() == 0) { 
 			return typeOfObject(propertyName, Collections.EMPTY_MAP);
 		}
+
 		ApexType itemType = null;
+
 		for (Object o : col) {
 			ApexType thisItemType = typeOfObject(propertyName, o);
+
 			if (itemType == null) {
 				itemType = thisItemType;
-			} else if (!itemType.equals(thisItemType)) {
-				if (itemType instanceof ApexClass && thisItemType instanceof ApexClass) {
+			} else if (itemType instanceof ApexClass && thisItemType instanceof ApexClass) {
 					ApexClass apexClass = (ApexClass)itemType;
 					ApexClass thisApexClass = (ApexClass)thisItemType;
-					
-  					apexClass.mergeFields(thisApexClass);
 
-					classes.remove(thisApexClass.toString());
-				} else if (itemType instanceof ApexPrimitive && thisItemType instanceof ApexPrimitive) {
-					ApexPrimitive a = (ApexPrimitive)itemType;
-					ApexPrimitive b = (ApexPrimitive)thisItemType;
-					if (a.canBePromotedTo(b)) {
-						itemType = b;
-					} else if (b.canBePromotedTo(a)) {
-						continue;
+					// Merge in both directions (for object-overwrite)
+					thisApexClass.mergeFields(apexClass);
+  					Set<String> classesToRemove = apexClass.mergeFields(thisApexClass);
+
+  					classesToRemove.remove(itemType.toString());
+  					for (String className : classesToRemove) {
+  						classes.remove(className);
 					}
-				} else {
-					throw new RuntimeException("Can't add an " + o.getClass() + " to a collection of " + itemType.getClass());
-  				}
+
+			} else if (itemType instanceof ApexPrimitive && thisItemType instanceof ApexPrimitive) {
+				ApexPrimitive a = (ApexPrimitive)itemType;
+				ApexPrimitive b = (ApexPrimitive)thisItemType;
+				if (a.canBePromotedTo(b)) {
+					itemType = b;
+				} else if (b.canBePromotedTo(a)) {
+					continue;
+				}
+			} else {
+				throw new RuntimeException("Can't add an " + o.getClass() + " to a collection of " + itemType.getClass());
 			}
 		}
+
 		return itemType;
 	}
 	
 	/** @return an ApexClass for this map */
 	ApexType typeOfMap(String propertyName, Map o) {
 		Map<ApexMember, ApexType> members = makeMembers(o);
-		// see if any existing classes have the same member set
-		for (ApexClass cls : classes.values()) {
-			if (cls.membersEqual(members))
-				return cls; 
-		}
 		String newClassName = getClassName(propertyName);
 		ApexClass newClass = new ApexClass(newClassName, members);
+
+		// see if any existing classes have the same member set
+		for (ApexClass cls : classes.values()) {
+			if (newClass.membersEqual(cls.getMembers())) {
+				cls.mergeFields(newClass);
+				return cls;
+			}
+		}
+
 		classes.put(newClassName, newClass);
 		return newClass;
 	}
